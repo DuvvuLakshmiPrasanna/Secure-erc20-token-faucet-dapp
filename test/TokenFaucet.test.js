@@ -17,8 +17,8 @@ describe("TokenFaucet", function () {
     [owner, user1, user2] = await ethers.getSigners();
     
     // Deploy Token
-    const FaucetToken = await ethers.getContractFactory("FaucetToken");
-    token = await FaucetToken.deploy();
+    const Token = await ethers.getContractFactory("Token");
+    token = await Token.deploy();
     await token.waitForDeployment();
     
     // Deploy Faucet

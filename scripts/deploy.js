@@ -11,13 +11,13 @@ async function main() {
   const balance = await ethers.provider.getBalance(deployer.address);
   console.log("Account balance:", ethers.formatEther(balance), "ETH");
   
-  // Deploy FaucetToken
-  console.log("\n1. Deploying FaucetToken...");
-  const FaucetToken = await ethers.getContractFactory("FaucetToken");
-  const token = await FaucetToken.deploy();
+  // Deploy Token
+  console.log("\n1. Deploying Token...");
+  const Token = await ethers.getContractFactory("Token");
+  const token = await Token.deploy();
   await token.waitForDeployment();
   const tokenAddress = await token.getAddress();
-  console.log("✓ FaucetToken deployed to:", tokenAddress);
+  console.log("✓ Token deployed to:", tokenAddress);
   
   // Deploy TokenFaucet
   console.log("\n2. Deploying TokenFaucet...");

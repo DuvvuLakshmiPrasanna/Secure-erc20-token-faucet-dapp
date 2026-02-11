@@ -120,7 +120,7 @@ User Action                Smart Contract              State Change
 
 ## 📜 Smart Contracts
 
-### FaucetToken.sol
+### Token.sol
 
 ERC-20 token implementation with controlled minting.
 
@@ -167,7 +167,7 @@ Token distribution contract with rate limiting.
 
 | Contract    | Address | Etherscan                                                       |
 | ----------- | ------- | --------------------------------------------------------------- |
-| FaucetToken | `0x...` | [View on Etherscan](https://sepolia.etherscan.io/address/0x...) |
+| Token       | `0x...` | [View on Etherscan](https://sepolia.etherscan.io/address/0x...) |
 | TokenFaucet | `0x...` | [View on Etherscan](https://sepolia.etherscan.io/address/0x...) |
 
 **Deployment Date:** TBD  
@@ -233,7 +233,8 @@ npm test
 6. **Deploy to Sepolia**
 
 ```bash
-npm run deploy
+# Deploy with network specification
+npm run deploy -- --network sepolia
 
 # After deployment, update frontend/.env with deployed addresses
 # VITE_TOKEN_ADDRESS=<deployed-token-address>

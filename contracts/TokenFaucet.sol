@@ -3,7 +3,7 @@ pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "./FaucetToken.sol";
+import "./Token.sol";
 
 /**
  * @title TokenFaucet
@@ -11,7 +11,7 @@ import "./FaucetToken.sol";
  */
 contract TokenFaucet is ReentrancyGuard, Ownable {
     // Token contract reference
-    FaucetToken public token;
+    Token public token;
     
     // Amount of tokens distributed per request (10 tokens with 18 decimals)
     uint256 public constant FAUCET_AMOUNT = 10 * 10**18;
@@ -41,7 +41,7 @@ contract TokenFaucet is ReentrancyGuard, Ownable {
      */
     constructor(address _token) Ownable(msg.sender) {
         require(_token != address(0), "Token address cannot be zero");
-        token = FaucetToken(_token);
+        token = Token(_token);
         paused = false;
     }
     
