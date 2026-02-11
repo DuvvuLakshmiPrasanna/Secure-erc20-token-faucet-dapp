@@ -3,6 +3,18 @@ FROM node:18-alpine AS build
 
 WORKDIR /app
 
+# Accept build arguments
+ARG VITE_RPC_URL
+ARG VITE_TOKEN_ADDRESS
+ARG VITE_FAUCET_ADDRESS
+ARG VITE_CHAIN_ID
+
+# Set environment variables for Vite build
+ENV VITE_RPC_URL=${VITE_RPC_URL}
+ENV VITE_TOKEN_ADDRESS=${VITE_TOKEN_ADDRESS}
+ENV VITE_FAUCET_ADDRESS=${VITE_FAUCET_ADDRESS}
+ENV VITE_CHAIN_ID=${VITE_CHAIN_ID}
+
 # Copy package files
 COPY package*.json ./
 
@@ -12,7 +24,7 @@ RUN npm ci
 # Copy source files
 COPY . .
 
-# Build the application
+# Build the application with environment variables
 RUN npm run build
 
 # Production stage
