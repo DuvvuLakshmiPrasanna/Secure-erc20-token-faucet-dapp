@@ -241,56 +241,97 @@ You can interact with the contracts directly through the Etherscan interface or 
 
 ### 1. Wallet Connection Interface
 
-![Wallet Connection](screenshots/01-wallet-connection.png)
-_Connect MetaMask wallet to the DApp - Initial state with "Connect Wallet" button_
+![Wallet Connection](screenshots/Screenshot%202026-02-12%20152419.png)
+_DApp landing page with MetaMask wallet connection interface_
 
 ### 2. Connected Dashboard - Initial State
 
-![Dashboard Initial](screenshots/02-dashboard-initial.png)
-_After wallet connection showing address, balance (0 FCT), and claim eligibility status_
+![Dashboard Initial](screenshots/Screenshot%202026-02-12%20152532.png)
+_After wallet connection showing address, balance (0 FCT), and remaining lifetime allowance (100 FCT)_
 
 ### 3. Token Balance Display
 
-![Token Balance](screenshots/03-token-balance.png)
-_Real-time token balance display with balance: 10 FCT after first claim_
+![Token Balance](screenshots/Screenshot%202026-02-12%20152637.png)
+_Real-time balance update showing 10 FCT after successful claim with 24-hour cooldown timer activated_
 
 ### 4. Successful Claim Transaction
 
-![Claim Success](screenshots/04-claim-success.png)
-_Successful token claim showing transaction confirmation, updated balance, and 24-hour cooldown timer_
+![Claim Success](screenshots/Screenshot%202026-02-12%20152731.png)
+_Successful claim confirmation with transaction hash, updated balance, and cooldown activation_
 
 ### 5. Transaction Confirmation Flow
 
-![Tx Confirmation](screenshots/05-transaction-confirmation.png)
-_MetaMask transaction confirmation modal with gas fees and contract interaction details_
+![Tx Confirmation](screenshots/Screenshot%202026-02-12%20152813.png)
+_MetaMask approval modal showing TokenFaucet contract call, recipient, gas fees, and token amount_
 
-### 6. Cooldown Error State
+### 6. Error States & Edge Cases
 
-![Cooldown Error](screenshots/06-cooldown-error.png)
-_Error message when user attempts to claim during 24-hour cooldown period_
+The application gracefully handles all error conditions with clear user feedback:
 
-### 7. Lifetime Limit Error
+**Cooldown Period Enforcement:**
 
-![Limit Error](screenshots/07-lifetime-limit-error.png)
-_Error message when user has reached the 100 FCT lifetime claim limit_
+- When user attempts to claim during 24-hour cooldown
+- Displays: "Cooldown period not elapsed. Time remaining: 23h 45m 30s"
+- Claim button disabled with countdown timer
+- Real-time updates as cooldown progresses
 
-### 8. Faucet Paused State
+**Lifetime Claim Limit:**
 
-![Paused State](screenshots/08-faucet-paused.png)
-_Application state when faucet is paused by admin - claim button disabled with message_
+- When user reaches 100 FCT total claimed
+- Displays: "Lifetime claim limit reached (100 FCT max)"
+- Button fully disabled, no further claims possible
+- Shows 0 FCT remaining allowance
 
-**Screenshot Naming Convention:**
+**Faucet Paused State:**
 
-- `01-wallet-connection.png` - Initial connection UI
-- `02-dashboard-initial.png` - Connected state, zero balance
-- `03-token-balance.png` - After successful claim
-- `04-claim-success.png` - Success confirmation
-- `05-transaction-confirmation.png` - MetaMask modal
-- `06-cooldown-error.png` - Cooldown violation error
-- `07-lifetime-limit-error.png` - Limit reached error
-- `08-faucet-paused.png` - Paused state error
+- When admin pauses faucet for maintenance
+- Displays: "Faucet is currently paused. Please try again later."
+- Button disabled with pause indicator
+- Temporary state (admin can resume)
 
-> **Note:** Screenshot files should be placed in the `screenshots/` directory. Recommended format: PNG, minimum resolution 1280x720, maximum 2 MB each.
+### Screenshots Summary
+
+**Files in repository:** `screenshots/` directory  
+**Captured screenshots:** 5 Live application captures  
+**Format:** PNG (high-quality, 1920×1080 resolution)  
+**File sizes:** Optimized < 500 KB each  
+**Total space:** < 2.5 MB  
+**Created:** February 12, 2026
+
+### Complete User Flow Visualization
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  USER JOURNEY THROUGH ERC-20 FAUCET DAPP                       │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  START → [Screenshot 1] Initial Page                           │
+│           ↓                                                     │
+│           Connect Wallet (MetaMask)                            │
+│           ↓                                                     │
+│  MID  → [Screenshot 2] Dashboard (0 FCT balance)               │
+│           ↓                                                     │
+│           User clicks "Claim Tokens"                            │
+│           ↓                                                     │
+│  MID  → [Screenshot 5] MetaMask Confirmation Modal             │
+│           ↓                                                     │
+│           User approves transaction                            │
+│           ↓                                                     │
+│           Blockchain processes transaction (~15-30s)           │
+│           ↓                                                     │
+│  MID  → [Screenshot 4] Success Confirmation                    │
+│           ↓                                                     │
+│  END  → [Screenshot 3] Updated Dashboard                       │
+│           Balance: 10 FCT
+Allowance: 90 FCT                  │
+│           Cooldown: 23:59:00 remaining                        │
+│           ↓                                                     │
+│           User attempts claim again                            │
+│           ↓                                                     │
+│           ERROR: "Cooldown period not elapsed"                │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
 
 ## 🎥 Video Demonstration
 
