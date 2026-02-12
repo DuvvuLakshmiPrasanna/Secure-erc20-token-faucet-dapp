@@ -241,28 +241,69 @@ You can interact with the contracts directly through the Etherscan interface or 
 
 ### 1. Wallet Connection Interface
 
-![Wallet Connection](screenshots/Screenshot%202026-02-12%20152419.png)
-_DApp landing page with MetaMask wallet connection interface_
+![Step 1: Initial Connection](screenshots/Screenshot%202026-02-12%20152419.png)
+
+**What you see:** DApp landing page with clean interface and "Connect Wallet" button ready.  
+**Action:** User clicks button → MetaMask popup appears → User approves connection  
+**Result:** Wallet is connected and recognized by the application
+
+---
 
 ### 2. Connected Dashboard - Initial State
 
-![Dashboard Initial](screenshots/Screenshot%202026-02-12%20152532.png)
-_After wallet connection showing address, balance (0 FCT), and remaining lifetime allowance (100 FCT)_
+![Step 2: Wallet Connected](screenshots/Screenshot%202026-02-12%20152532.png)
+
+**Dashboard Shows:**
+
+- Connected Ethereum address
+- **Balance: 0 FCT** (initial, no claims yet)
+- **Remaining Allowance: 100 FCT** (full lifetime available)
+- "Claim Tokens" button: **ENABLED** ✓
+
+---
 
 ### 3. Token Balance Display
 
-![Token Balance](screenshots/Screenshot%202026-02-12%20152637.png)
-_Real-time balance update showing 10 FCT after successful claim with 24-hour cooldown timer activated_
+![Step 3: Balance Updated](screenshots/Screenshot%202026-02-12%20152637.png)
+
+**After Claim Processed:**
+
+- **Balance: 10 FCT** ✅ (received from claim)
+- **Remaining: 90 FCT** (out of 100 lifetime)
+- **Cooldown: 23:59:00** (24-hour countdown active)
+- "Claim Tokens" button: **DISABLED** (must wait)
+
+---
 
 ### 4. Successful Claim Transaction
 
-![Claim Success](screenshots/Screenshot%202026-02-12%20152731.png)
-_Successful claim confirmation with transaction hash, updated balance, and cooldown activation_
+![Step 4: Claim Confirmed](screenshots/Screenshot%202026-02-12%20152731.png)
+
+**Success Details:**
+
+- ✅ Confirmation message displayed
+- Transaction hash visible (verifiable on Etherscan)
+- Balance updated: **10 FCT**
+- Cooldown timer running: **23:59:00**
+- Button remains disabled during cooldown
+
+---
 
 ### 5. Transaction Confirmation Flow
 
-![Tx Confirmation](screenshots/Screenshot%202026-02-12%20152813.png)
-_MetaMask approval modal showing TokenFaucet contract call, recipient, gas fees, and token amount_
+![Step 5: MetaMask Modal](screenshots/Screenshot%202026-02-12%20152813.png)
+
+**Transaction Approval Modal Shows:**
+
+- Network: **Sepolia** (correct testnet)
+- From: Your connected wallet
+- To: **TokenFaucet** contract address
+- Function: `requestTokens()` call
+- Gas: Transaction fee estimate
+- Tokens: **10 FCT** to be minted
+- **Action:** User clicks "Confirm" to approve
+
+After confirmation → Transaction sent → Balance updates → Cooldown activates
 
 ### 6. Error States & Edge Cases
 
