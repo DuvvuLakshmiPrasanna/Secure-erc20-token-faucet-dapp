@@ -12,11 +12,14 @@ A full-stack decentralized application (DApp) that distributes ERC-20 tokens wit
 - [Overview](#overview)
 - [Features](#features)
 - [Architecture](#architecture)
-- [Smart Contracts](#smart-contracts)
 - [Deployed Contracts](#deployed-contracts)
+- [Screenshots](#screenshots)
+- [Video Demonstration](#video-demonstration)
 - [Quick Start](#quick-start)
+- [Smart Contracts](#smart-contracts)
 - [Configuration](#configuration)
 - [Testing](#testing)
+- [Deployment Verification](#deployment-verification)
 - [Design Decisions](#design-decisions)
 - [Security Considerations](#security-considerations)
 - [Evaluation Interface](#evaluation-interface)
@@ -234,7 +237,132 @@ Both contracts are fully verified on Etherscan with complete source code visibil
 
 You can interact with the contracts directly through the Etherscan interface or use the frontend DApp.
 
-## 🚀 Quick Start
+## � Screenshots
+
+### 1. Wallet Connection Interface
+
+![Wallet Connection](screenshots/01-wallet-connection.png)
+_Connect MetaMask wallet to the DApp - Initial state with "Connect Wallet" button_
+
+### 2. Connected Dashboard - Initial State
+
+![Dashboard Initial](screenshots/02-dashboard-initial.png)
+_After wallet connection showing address, balance (0 FCT), and claim eligibility status_
+
+### 3. Token Balance Display
+
+![Token Balance](screenshots/03-token-balance.png)
+_Real-time token balance display with balance: 10 FCT after first claim_
+
+### 4. Successful Claim Transaction
+
+![Claim Success](screenshots/04-claim-success.png)
+_Successful token claim showing transaction confirmation, updated balance, and 24-hour cooldown timer_
+
+### 5. Transaction Confirmation Flow
+
+![Tx Confirmation](screenshots/05-transaction-confirmation.png)
+_MetaMask transaction confirmation modal with gas fees and contract interaction details_
+
+### 6. Cooldown Error State
+
+![Cooldown Error](screenshots/06-cooldown-error.png)
+_Error message when user attempts to claim during 24-hour cooldown period_
+
+### 7. Lifetime Limit Error
+
+![Limit Error](screenshots/07-lifetime-limit-error.png)
+_Error message when user has reached the 100 FCT lifetime claim limit_
+
+### 8. Faucet Paused State
+
+![Paused State](screenshots/08-faucet-paused.png)
+_Application state when faucet is paused by admin - claim button disabled with message_
+
+**Screenshot Naming Convention:**
+
+- `01-wallet-connection.png` - Initial connection UI
+- `02-dashboard-initial.png` - Connected state, zero balance
+- `03-token-balance.png` - After successful claim
+- `04-claim-success.png` - Success confirmation
+- `05-transaction-confirmation.png` - MetaMask modal
+- `06-cooldown-error.png` - Cooldown violation error
+- `07-lifetime-limit-error.png` - Limit reached error
+- `08-faucet-paused.png` - Paused state error
+
+> **Note:** Screenshot files should be placed in the `screenshots/` directory. Recommended format: PNG, minimum resolution 1280x720, maximum 2 MB each.
+
+## 🎥 Video Demonstration
+
+A complete video demonstration of the DApp is available showing:
+
+### Video Content (2-5 minutes)
+
+1. **Wallet Connection** (0:00-0:30)
+
+   - Launching the DApp
+   - Clicking "Connect Wallet"
+   - MetaMask popup and approval
+   - Displaying connected address
+
+2. **Initial State** (0:30-1:00)
+
+   - Showing wallet address
+   - Initial balance (0 FCT)
+   - Claim eligibility status
+   - Available interface buttons
+
+3. **Successful Token Claim** (1:00-2:00)
+
+   - Clicking "Claim Tokens" button
+   - MetaMask transaction confirmation
+   - Gas fees and confirmation
+   - Transaction processing
+   - Balance update to 10 FCT
+   - Cooldown timer display (23h 59m remaining)
+
+4. **Cooldown Period Behavior** (2:00-3:00)
+
+   - Attempting to claim immediately after
+   - Error message displayed
+   - Real-time countdown timer
+   - UI feedback on disabled state
+
+5. **Transaction History** (3:00-3:30)
+
+   - Viewing transaction hash
+   - Etherscan link verification
+   - Contract interaction confirmation
+
+6. **Error Handling** (3:30-4:00)
+   - Network error handling
+   - Insufficient gas scenario
+   - User rejection of transaction
+   - Error message clarity
+
+### Video Links
+
+**Option A: YouTube**
+
+```
+https://www.youtube.com/watch?v=YOUR_VIDEO_ID
+```
+
+**Option B: Loom Recording**
+
+```
+https://www.loom.com/share/YOUR_LOOM_ID
+```
+
+**Option C: Repository Recording**
+
+```
+Place the video in the root directory as: erc20-faucet-demo.mp4
+```
+
+> **Recommended:** Record with OBS Studio (free) or QuickTime (macOS) with cursor highlighting enabled for clarity.
+
+## 🚀 Quick Start Continued
 
 ### Prerequisites
 
