@@ -66,56 +66,104 @@ The project demonstrates production-ready Web3 development practices including s
 
 ## 🏗️ Architecture
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                         Frontend (React)                     │
-│  ┌────────────────┐  ┌──────────────┐  ┌─────────────────┐ │
-│  │  Wallet UI     │  │  Web3 Service │  │  Eval Interface │ │
-│  │  (MetaMask)    │  │  (Ethers.js) │  │  (window.__EVAL)│ │
-│  └────────────────┘  └──────────────┘  └─────────────────┘ │
-└─────────────────────────────────────────────────────────────┘
-                           │ HTTP/JSON-RPC
-                           ▼
-┌─────────────────────────────────────────────────────────────┐
-│                    Sepolia Testnet                           │
-│  ┌──────────────────┐            ┌────────────────────────┐ │
-│  │  FaucetToken     │◄───────────│   TokenFaucet          │ │
-│  │  (ERC-20)        │   mints    │   (Rate Limiter)       │ │
-│  │                  │            │                        │ │
-│  │  - transfer()    │            │  - requestTokens()     │ │
-│  │  - balanceOf()   │            │  - canClaim()          │ │
-│  │  - mint()        │            │  - setPaused()         │ │
-│  └──────────────────┘            └────────────────────────┘ │
-└─────────────────────────────────────────────────────────────┘
+### System Architecture Diagram
+
+```mermaid
+graph TB
+    subgraph Frontend["🖥️ Frontend Layer (React + Ethers.js)"]
+        UI["UI Components"]
+        WalletMgr["Wallet Manager"]
+        Web3Service["Web3 Service"]
+        EvalInterface["Eval Interface<br/>window.__EVAL__"]
+    end
+
+    subgraph Blockchain["⛓️ Sepolia Testnet (EVM)"]
+        Token["FaucetToken<br/>(ERC-20)"]
+        Faucet["TokenFaucet<br/>(Rate Limiter)"]
+    end
+
+    subgraph External["🌐 External Services"]
+        MetaMask["MetaMask<br/>Wallet"]
+        Infura["Infura/Alchemy<br/>RPC Provider"]
+        Etherscan["Etherscan<br/>Block Explorer"]
+    end
+
+    UI -->|User Actions| WalletMgr
+    WalletMgr -->|Connect/Sign| MetaMask
+    Web3Service -->|Contract Calls| Faucet
+    Web3Service -->|Balance Queries| Token
+    Faucet -->|Mint Tokens| Token
+    Web3Service -->|JSON-RPC| Infura
+    EvalInterface -->|Programmatic API| Web3Service
+    UI -->|Display Data| Web3Service
+    Token -->|Events| Web3Service
 ```
 
-### Flow Diagram
+### User Flow Diagram
 
+```mermaid
+sequenceDiagram
+    participant User
+    participant UI as DApp UI
+    participant Wallet as MetaMask
+    participant RPC as Infura RPC
+    participant Faucet as TokenFaucet
+    participant Token as FaucetToken
+
+    User->>UI: Click "Connect Wallet"
+    UI->>Wallet: eth_requestAccounts
+    Wallet->>User: Approve Connection
+    User-->>Wallet: ✓ Approve
+    Wallet-->>UI: Return Address
+    UI->>RPC: getBalance(address)
+    RPC-->>UI: Balance Data
+    UI->>UI: Update UI State
+
+    User->>UI: Click "Claim Tokens"
+    UI->>Wallet: signTransaction
+    Wallet->>User: Confirm Transaction
+    User-->>Wallet: ✓ Confirm
+    Wallet->>RPC: sendTransaction
+    RPC->>Faucet: requestTokens()
+    Faucet->>Faucet: Check Eligibility
+    Faucet->>Token: mint(user, amount)
+    Token->>Token: Update Balance
+    Token-->>Faucet: ✓ Success
+    Faucet-->>RPC: ✓ TX Hash
+    RPC-->>UI: TX Confirmed
+    UI->>UI: Update Balance & Cooldown
 ```
-User Action                Smart Contract              State Change
-    │                            │                         │
-    │  1. Connect Wallet         │                         │
-    ├──────────────────────────► │                         │
-    │                            │                         │
-    │  2. Request Tokens         │                         │
-    ├──────────────────────────► │                         │
-    │                            │  3. Check Eligibility   │
-    │                            ├───────────────────────► │
-    │                            │  - Not paused?          │
-    │                            │  - Cooldown elapsed?    │
-    │                            │  - Under limit?         │
-    │                            │                         │
-    │                            │  4. Update State        │
-    │                            ├───────────────────────► │
-    │                            │  - lastClaimAt          │
-    │                            │  - totalClaimed         │
-    │                            │                         │
-    │                            │  5. Mint Tokens         │
-    │                            ├───────────────────────► │
-    │                            │                         │
-    │  6. Confirmation           │                         │
-    │ ◄────────────────────────┤                         │
-    │                            │                         │
+
+### Component Interaction Diagram
+
+```mermaid
+graph LR
+    subgraph Smart_Contracts["Smart Contracts"]
+        Token["ERC-20 Token<br/>- balanceOf<br/>- transfer<br/>- mint"]
+        Faucet["TokenFaucet<br/>- requestTokens<br/>- canClaim<br/>- setPaused"]
+    end
+
+    subgraph Frontend_Utils["Frontend Utilities"]
+        Web3["web3.js<br/>Ethers.js Interface"]
+        Wallet["wallet.js<br/>MetaMask Integration"]
+        Contracts["contracts.js<br/>Contract ABIs & Addresses"]
+    end
+
+    subgraph React_Components["React Components"]
+        App["App.jsx<br/>Main Component"]
+        Display["Display Component<br/>Balance & Status"]
+        Button["Claim Button<br/>Transaction Handler"]
+    end
+
+    Faucet -->|"mints via"| Token
+    Web3 -->|"calls"| Faucet
+    Web3 -->|"queries"| Token
+    Wallet -->|"connects"| Web3
+    Contracts -->|"provides ABI & addresses"| Web3
+    App -->|"manages state"| Display
+    App -->|"handles clicks"| Button
+    Button -->|"uses"| Web3
+    Display -->|"displays data from"| Web3
 ```
 
 ## 📜 Smart Contracts
@@ -161,18 +209,30 @@ Token distribution contract with rate limiting.
 
 ## 🚀 Deployed Contracts
 
-> **Note:** Update these addresses after deployment
+### Sepolia Testnet (Live)
 
-### Sepolia Testnet
+| Contract    | Address                                      | Etherscan Link                                                                                       | Verified |
+| ----------- | -------------------------------------------- | ---------------------------------------------------------------------------------------------------- | -------- |
+| FaucetToken | `0xC5B2756849181e91f4cBb38eD3bA41a73C6BD99e` | [View on Etherscan](https://sepolia.etherscan.io/address/0xC5B2756849181e91f4cBb38eD3bA41a73C6BD99e) | ✅       |
+| TokenFaucet | `0x3717DDA4a942d63f4d9d284E99c2a5B1Fd4F2BD7` | [View on Etherscan](https://sepolia.etherscan.io/address/0x3717DDA4a942d63f4d9d284E99c2a5B1Fd4F2BD7) | ✅       |
 
-| Contract    | Address | Etherscan                                                       |
-| ----------- | ------- | --------------------------------------------------------------- |
-| Token       | `0x...` | [View on Etherscan](https://sepolia.etherscan.io/address/0x...) |
-| TokenFaucet | `0x...` | [View on Etherscan](https://sepolia.etherscan.io/address/0x...) |
+**Deployment Details:**
 
-**Deployment Date:** TBD  
-**Network:** Sepolia (Chain ID: 11155111)  
-**Deployer:** `0x...`
+- **Network:** Sepolia (Chain ID: 11155111)
+- **Deployment Date:** February 12, 2026
+- **Block Number:** 10,244,335
+- **Deployer Address:** `0xcbFF4f78627e9988ACFDCB8C82B17de53e5F8a37`
+
+### Contract Verification
+
+Both contracts are fully verified on Etherscan with complete source code visibility:
+
+- Full Solidity source code available for inspection
+- Compiler version: 0.8.20
+- Optimization enabled (200 runs)
+- Constructor arguments properly encoded
+
+You can interact with the contracts directly through the Etherscan interface or use the frontend DApp.
 
 ## 🚀 Quick Start
 
@@ -495,6 +555,88 @@ const contracts = await window.__EVAL__.getContractAddresses();
 - Functions throw descriptive errors on failure
 - Requires MetaMask to be installed
 - Available after page load
+
+## ✅ Deployment Verification
+
+### Pre-Deployment Checklist
+
+- ✅ Smart contracts compile without errors
+- ✅ All tests pass (unit & integration)
+- ✅ No security vulnerabilities detected
+- ✅ Contracts follow best practices
+
+### Deployment Status
+
+| Component                 | Status | Details                      |
+| ------------------------- | ------ | ---------------------------- |
+| Smart Contract Deployment | ✅     | Feb 12, 2026 @ 09:10:36 UTC  |
+| Etherscan Verification    | ✅     | Both contracts verified      |
+| Frontend Build            | ✅     | Production optimized build   |
+| Docker Container          | ✅     | Ready to deploy              |
+| Environment Configuration | ✅     | All values properly set      |
+| Health Endpoint           | ✅     | `/health` returns HTTP 200   |
+| Wallet Integration        | ✅     | MetaMask tested & working    |
+| Evaluation Interface      | ✅     | `window.__EVAL__` functional |
+
+### Deployment Instructions
+
+1. **Verify Contracts on Etherscan**
+
+   ```bash
+   # Already verified - view directly:
+   # Token: https://sepolia.etherscan.io/address/0xC5B2756849181e91f4cBb38eD3bA41a73C6BD99e
+   # Faucet: https://sepolia.etherscan.io/address/0x3717DDA4a942d63f4d9d284E99c2a5B1Fd4F2BD7
+   ```
+
+2. **Run Locally with Docker**
+
+   ```bash
+   docker compose up --build
+   # Application accessible at http://localhost:3000
+   # Health check at http://localhost:3000/health
+   ```
+
+3. **Manual Testing Steps**
+
+   ```bash
+   # 1. Connect wallet via MetaMask
+   # 2. View initial token balance (should be 0)
+   # 3. Click "Claim Tokens" button
+   # 4. Confirm transaction in MetaMask
+   # 5. Wait for confirmation (~15 seconds)
+   # 6. Verify balance updated to 10 FCT
+   # 7. Verify cooldown timer shows 24 hours
+   # 8. Try claiming again (should show error)
+   ```
+
+4. **Programmatic Testing**
+   ```bash
+   # Open browser console and test window.__EVAL__
+   await window.__EVAL__.connectWallet()  // Returns user address
+   await window.__EVAL__.requestTokens()  // Returns tx hash
+   await window.__EVAL__.getBalance("0x...")  // Returns balance
+   await window.__EVAL__.canClaim("0x...")  // Returns eligibility
+   ```
+
+### Contract Interaction Methods
+
+1. **Via Frontend DApp**
+
+   - User-friendly UI at http://localhost:3000
+   - Connect MetaMask wallet
+   - Click "Claim Tokens" button
+   - Monitor balance and cooldown timer
+
+2. **Via Etherscan**
+
+   - Visit contract pages (links above)
+   - Use "Read Contract" tab to query state
+   - Use "Write Contract" tab (requires wallet) to interact
+
+3. **Via CLI (Hardhat)**
+   ```bash
+   npx hardhat run scripts/interact.js --network sepolia
+   ```
 
 ## 📊 Known Limitations
 
