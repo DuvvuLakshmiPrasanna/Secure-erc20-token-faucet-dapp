@@ -550,7 +550,27 @@ For issues and questions:
 - Check existing issues for solutions
 - Review test cases for usage examples
 
-## 🙏 Acknowledgments
+## � Recent Updates (February 2026)
+
+### Configuration & Deployment
+
+- ✅ Integrated real Sepolia testnet credentials and contract addresses
+- ✅ Updated environment variables with live RPC endpoints and Etherscan API key
+
+### Frontend Improvements
+
+- ✅ Refactored evaluation interface (`window.__EVAL__`) for better tree-shaking in production builds
+- ✅ Simplified eval.js module initialization to export directly to window
+- ✅ Updated development server port from 3000 to 3001 (Vite config)
+- ✅ Improved code clarity in web3 integration module
+
+### Smart Contract Configuration
+
+- ✅ Cleaned up hardhat.config.js formatting and structure
+- ✅ Removed redundant fallback values and dummy API keys
+- ✅ Streamlined network configuration for production deployment
+
+## �🙏 Acknowledgments
 
 - OpenZeppelin for secure contract libraries
 - Hardhat for development framework

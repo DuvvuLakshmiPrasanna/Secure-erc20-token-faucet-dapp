@@ -1,0 +1,8 @@
+{
+  "network": "sepolia",
+  "token": "0xC5B2756849181e91f4cBb38eD3bA41a73C6BD99e",
+  "faucet": "0x3717DDA4a942d63f4d9d284E99c2a5B1Fd4F2BD7",
+  "deployer": "0xcbFF4f78627e9988ACFDCB8C82B17de53e5F8a37",
+  "timestamp": "2026-02-12T09:10:36.150Z",
+  "blockNumber": 10244335
+}
