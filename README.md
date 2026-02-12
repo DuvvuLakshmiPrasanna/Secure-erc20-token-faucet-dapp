@@ -241,7 +241,7 @@ You can interact with the contracts directly through the Etherscan interface or 
 
 ### 1. Wallet Connection Interface
 
-![Step 1: Initial Connection](screenshots/Screenshot%202026-02-12%20152419.png)
+![Step 1: Initial Connection](Screenshots/Screenshot%202026-02-12%20152419.png)
 
 **What you see:** DApp landing page with clean interface and "Connect Wallet" button ready.  
 **Action:** User clicks button → MetaMask popup appears → User approves connection  
@@ -251,7 +251,7 @@ You can interact with the contracts directly through the Etherscan interface or 
 
 ### 2. Connected Dashboard - Initial State
 
-![Step 2: Wallet Connected](screenshots/Screenshot%202026-02-12%20152532.png)
+![Step 2: Wallet Connected](Screenshots/Screenshot%202026-02-12%20152532.png)
 
 **Dashboard Shows:**
 
@@ -264,7 +264,7 @@ You can interact with the contracts directly through the Etherscan interface or 
 
 ### 3. Token Balance Display
 
-![Step 3: Balance Updated](screenshots/Screenshot%202026-02-12%20152637.png)
+![Step 3: Balance Updated](Screenshots/Screenshot%202026-02-12%20152637.png)
 
 **After Claim Processed:**
 
@@ -277,7 +277,7 @@ You can interact with the contracts directly through the Etherscan interface or 
 
 ### 4. Successful Claim Transaction
 
-![Step 4: Claim Confirmed](screenshots/Screenshot%202026-02-12%20152731.png)
+![Step 4: Claim Confirmed](Screenshots/Screenshot%202026-02-12%20152731.png)
 
 **Success Details:**
 
@@ -291,7 +291,7 @@ You can interact with the contracts directly through the Etherscan interface or 
 
 ### 5. Transaction Confirmation Flow
 
-![Step 5: MetaMask Modal](screenshots/Screenshot%202026-02-12%20152813.png)
+![Step 5: MetaMask Modal](Screenshots/Screenshot%202026-02-12%20152813.png)
 
 **Transaction Approval Modal Shows:**
 
